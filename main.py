@@ -1,17 +1,53 @@
-# This is a sample Python script.
+import pygame
+import sys
+from utils import WIDTH, HEIGHT, FPS, LIGHT_PISTACHIO
+from Player import Player
+from Wall import walls
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    print("elo")
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Inicjalizacja Pygameee
+pygame.init()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# Utworzenie okna gry
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Gra w labirynt")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# Klasy
+
+
+
+
+
+# Inicjalizacja gracza
+player = Player()
+
+# Grupa sprite'ów
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+
+# Główna pętla gry
+running = True
+while running:
+    # Częstotliwość odświeżania ekranu
+    pygame.time.Clock().tick(FPS)
+
+    # Obsługa zdarzeń
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Aktualizacja
+    all_sprites.update()
+
+    # Rysowanie
+    screen.fill(LIGHT_PISTACHIO)
+    # Rysowanie ścian
+    walls.draw(screen)
+    all_sprites.draw(screen)
+
+    # Wyświetlanie zmian
+    pygame.display.flip()
+
+# Zamknięcie programu
+pygame.quit()
+sys.exit()
