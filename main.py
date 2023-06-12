@@ -1,8 +1,9 @@
 import pygame
 import sys
-from utils import WIDTH, HEIGHT, FPS, LIGHT_PISTACHIO
-from Player import Player
+from utils import WIDTH, HEIGHT, FPS, LIGHT_PISTACHIO,BLACK
+from Player import Player, boxes
 from Wall import walls
+
 
 # Inicjalizacja Pygameee
 pygame.init()
@@ -14,7 +15,10 @@ pygame.display.set_caption("Gra w labirynt")
 
 # Klasy
 
+font = pygame.font.Font(None, 36)
 
+score = 0
+speed = 0
 
 
 
@@ -28,6 +32,7 @@ all_sprites.add(player)
 # Główna pętla gry
 running = True
 while running:
+
     # Częstotliwość odświeżania ekranu
     pygame.time.Clock().tick(FPS)
 
@@ -38,11 +43,20 @@ while running:
 
     # Aktualizacja
     all_sprites.update()
+    boxes.update()
+    walls.update()
+
+    # rydowanie metryki
+    text_surface = font.render("Score: " + str(score), True, BLACK)
+    screen.blit(text_surface, (WIDTH - text_surface.get_width() - 20, 0))
+    text_surface = font.render("Speed: " + str(speed), True, BLACK)
+    screen.blit(text_surface, (WIDTH - text_surface.get_width() - 20, text_surface.get_height() + 10))
 
     # Rysowanie
     screen.fill(LIGHT_PISTACHIO)
     # Rysowanie ścian
     walls.draw(screen)
+    boxes.draw(screen)
     all_sprites.draw(screen)
 
     # Wyświetlanie zmian

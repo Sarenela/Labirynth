@@ -1,7 +1,9 @@
 import pygame
 from utils import PINK, WIDTH, HEIGHT, BLACK
 from Wall import walls
-
+from Box import create_box_wall
+import Box
+boxes = create_box_wall()
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -11,16 +13,18 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
 
     def update(self):
+        old_rect = self.rect.copy()
+
         # Poruszanie gracza
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rect.x -= 5
+            self.rect.x -= 6
         if keys[pygame.K_RIGHT]:
-            self.rect.x += 5
+            self.rect.x += 6
         if keys[pygame.K_UP]:
-            self.rect.y -= 5
+            self.rect.y -= 6
         if keys[pygame.K_DOWN]:
-            self.rect.y += 5
+            self.rect.y += 6
 
         # Sprawdzenie kolizji z granicami ekranu
         if self.rect.left < 0:
@@ -33,5 +37,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = HEIGHT
 
         # Sprawdzenie kolizji z ścianami
+
         if pygame.sprite.spritecollide(self, walls, False):
             self.image.fill(BLACK)
+
+        collided_boxes = pygame.sprite.spritecollide(self, boxes, False)
+        if collided_boxes:
+            for box in collided_boxes:
+                box.decrease_value(1)
+                self.rect = old_rect
+                self.rect.y+=5
