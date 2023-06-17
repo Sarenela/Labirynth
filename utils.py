@@ -17,6 +17,10 @@ PISTACHIO = (147,197,114)
 LIGHT_PISTACHIO = (210, 240, 180)
 PINK = (222,165,164)
 
+# metryki
+speed = 0
+score = 0
+
 
 #util methods:
 def draw6():
