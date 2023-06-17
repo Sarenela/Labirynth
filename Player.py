@@ -47,3 +47,4 @@ class Player(pygame.sprite.Sprite):
                 box.decrease_value(1)
                 self.rect = old_rect
                 self.rect.y+=5
+

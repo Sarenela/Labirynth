@@ -1,20 +1,71 @@
-# This is a sample Python script.
-import random
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pygame
+import sys
+from utils import WIDTH, HEIGHT, FPS, LIGHT_PISTACHIO,BLACK
+from Player import Player, boxes
+from Wall import walls
+from Box import create_box_wall
 
 
-def print_hi():
-    numbers = [0,1, 2, 3, 4, 5]
-    drawn_numbers = set(random.sample(numbers, k=4))
-    number1 = random.choice(numbers)
-    number2 = random.choice(numbers)
-    drawn_numbers.add(number1)
-    drawn_numbers.add(number2)
+# Inicjalizacja Pygameee
+pygame.init()
+
+
+# Utworzenie okna gry
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Gra w labirynt")
+
+# Klasy
+
+font = pygame.font.Font(None, 36)
+
+score = 0
+speed = 0
 
 
 
+# Inicjalizacja gracza
+player = Player()
 
+# Grupa sprite'ów
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
 
-if __name__=="__main__":
-    print_hi()
+# Główna pętla gry
+running = True
+while running:
+
+    # Częstotliwość odświeżania ekranu
+    pygame.time.Clock().tick(FPS)
+
+    # Obsługa zdarzeń
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Aktualizacja
+    all_sprites.update()
+    boxes.update()
+    walls.update()
+
+    # rydowanie metryki
+    text_surface = font.render("Score: " + str(score), True, BLACK)
+    screen.blit(text_surface, (WIDTH - text_surface.get_width() - 20, 0))
+    text_surface = font.render("Speed: " + str(speed), True, BLACK)
+    screen.blit(text_surface, (WIDTH - text_surface.get_width() - 20, text_surface.get_height() + 10))
+
+    # Rysowanie
+    screen.fill(LIGHT_PISTACHIO)
+    # Rysowanie ścian
+    walls.draw(screen)
+    boxes.draw(screen)
+    all_sprites.draw(screen)
+
+    if len(boxes) ==0:
+        boxes = create_box_wall()
+
+    # Wyświetlanie zmian
+    pygame.display.flip()
+
+# Zamknięcie programu
+pygame.quit()
+sys.exit()
